@@ -24,20 +24,19 @@ import java.util.List;
 
 public class MainActivity extends Activity implements View.OnClickListener, AdapterView.OnItemClickListener {
 
-    private boolean mIsOn = false;
     private boolean doubleBackToExitPressedOnce = false;
 
 
-    private Button mBtnOnOff;
-    private Button mBtnAddPhoneNum;
-    private EditText mEditPhoneNum;
-    private ListView mListViewPhoneNum;
+    private Button btnOnOff;
+    private Button btnAddPhoneNum;
+    private EditText editPhoneNum;
+    private ListView listViewPhoneNum;
     private PhoneNumberAdapter adapter;
     private static List<BroadcastReceiver> receivers = new ArrayList<BroadcastReceiver>();
 
     private ArrayList phoneArray = new ArrayList();
-    private boolean mIsStateOn = false;
-    SmsReceiver mSmsReceiver = new SmsReceiver();
+    private boolean isStateOn = false;
+    SmsReceiver smsReceiver = new SmsReceiver();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,17 +46,17 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
         setLayout();
         setFunction();
 
-        mSmsReceiver = new SmsReceiver();
+        smsReceiver = new SmsReceiver();
     }
 
     private void setLayout() {
-        mBtnOnOff = (Button)findViewById(R.id.btn_onoff);
-        mBtnAddPhoneNum = (Button)findViewById(R.id.btn_add);
-        mEditPhoneNum = (EditText)findViewById(R.id.edit_add_number);
-        mListViewPhoneNum = (ListView)findViewById(R.id.listview_number);
+        btnOnOff = (Button)findViewById(R.id.btn_onoff);
+        btnAddPhoneNum = (Button)findViewById(R.id.btn_add);
+        editPhoneNum = (EditText)findViewById(R.id.edit_add_number);
+        listViewPhoneNum = (ListView)findViewById(R.id.listview_number);
 
-        mBtnOnOff.setOnClickListener(this);
-        mBtnAddPhoneNum.setOnClickListener(this);
+        btnOnOff.setOnClickListener(this);
+        btnAddPhoneNum.setOnClickListener(this);
     }
 
     private void setFunction() {
@@ -69,8 +68,8 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
         }
 
         adapter = new PhoneNumberAdapter(this, android.R.layout.simple_list_item_1, phoneArray);
-        mListViewPhoneNum.setAdapter(adapter);
-        mListViewPhoneNum.setOnItemClickListener(this);
+        listViewPhoneNum.setAdapter(adapter);
+        listViewPhoneNum.setOnItemClickListener(this);
         adapter.notifyDataSetChanged();
     }
 
@@ -78,25 +77,25 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_add:
-                if(!mEditPhoneNum.getText().toString().isEmpty()) {
-                    adapter.add(mEditPhoneNum.getText().toString());
+                if(!editPhoneNum.getText().toString().isEmpty()) {
+                    adapter.add(editPhoneNum.getText().toString());
                     adapter.notifyDataSetChanged();
-                    mEditPhoneNum.setText("");
+                    editPhoneNum.setText("");
                 }
                 break;
             case R.id.btn_onoff:
-                if(!mIsStateOn) {
-                    mIsStateOn = true;
-                    mBtnOnOff.setText(getString(R.string.on));
+                if(!isStateOn) {
+                    isStateOn = true;
+                    btnOnOff.setText(getString(R.string.on));
                     IntentFilter intentFilter = new IntentFilter("android.provider.Telephony.SMS_RECEIVED");
                     intentFilter.addAction(Intent.ACTION_BOOT_COMPLETED);
-                    registerReceiver(mSmsReceiver, intentFilter);
-                    receivers.add(mSmsReceiver);
+                    registerReceiver(smsReceiver, intentFilter);
+                    receivers.add(smsReceiver);
                 } else {
-                    mIsStateOn = false;
-                    mBtnOnOff.setText(getString(R.string.off));
-                    unregisterReceiver(mSmsReceiver);
-                    receivers.remove(mSmsReceiver);
+                    isStateOn = false;
+                    btnOnOff.setText(getString(R.string.off));
+                    unregisterReceiver(smsReceiver);
+                    receivers.remove(smsReceiver);
                 }
                 break;
         }
@@ -130,9 +129,9 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(isReceiverRegistered(mSmsReceiver)) {
-            unregisterReceiver(mSmsReceiver);
-            receivers.remove(mSmsReceiver);
+        if(isReceiverRegistered(smsReceiver)) {
+            unregisterReceiver(smsReceiver);
+            receivers.remove(smsReceiver);
         }
     }
 

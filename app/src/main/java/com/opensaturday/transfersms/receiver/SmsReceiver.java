@@ -43,7 +43,7 @@ public class SmsReceiver extends BroadcastReceiver{
 
 			while(c.moveToNext()) {
 				if(c.getString(1).equals(origNumber)) {
-					mSmsManager.sendTextMessage("01041231333", null, message, null, null);
+					mSmsManager.sendTextMessage("01001234567", null, message, null, null);
 				}
 			}
 		}

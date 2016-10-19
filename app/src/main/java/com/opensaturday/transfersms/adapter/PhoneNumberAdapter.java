@@ -17,34 +17,34 @@ import java.util.ArrayList;
 
 public class PhoneNumberAdapter extends BaseAdapter{
 
-    private ArrayList mList = new ArrayList();
-    private Context mContext;
-    private int mLayoutResourceId;
-    private LayoutInflater mInflater;
+    private ArrayList list = new ArrayList();
+    private Context context;
+    private int layoutResourceId;
+    private LayoutInflater inflater;
     private SmsTransferDb db;
 
 
     public PhoneNumberAdapter(Context context, int id, ArrayList list) {
-        mContext = context;
-        mList = list;
-        mLayoutResourceId = id;
-        mInflater = (LayoutInflater)  context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        db = new SmsTransferDb(mContext);
+        this.context = context;
+        this.list = list;
+        this.layoutResourceId = id;
+        this.inflater = (LayoutInflater)  context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        this.db = new SmsTransferDb(context);
     }
 
     public void add(String str) {
-        mList.add(str);
+        list.add(str);
         db.insert(str);
     }
 
     @Override
     public int getCount() {
-        return mList.size();
+        return list.size();
     }
 
     @Override
     public Object getItem(int i) {
-        return mList.get(i);
+        return list.get(i);
     }
 
     @Override
@@ -57,7 +57,7 @@ public class PhoneNumberAdapter extends BaseAdapter{
         PhoneHolder holder;
         View rowView;
         if(convertView==null){
-            rowView = mInflater.inflate(mLayoutResourceId, parent,false);
+            rowView = inflater.inflate(layoutResourceId, parent,false);
             holder = new PhoneHolder();
             holder.number = (TextView) rowView.findViewById(android.R.id.text1);
             rowView.setTag(holder);
@@ -67,7 +67,7 @@ public class PhoneNumberAdapter extends BaseAdapter{
             holder = (PhoneHolder)rowView.getTag();
         }
 
-        holder.number.setText(mList.get(position).toString());
+        holder.number.setText(list.get(position).toString());
         return rowView;
     }
 
@@ -76,7 +76,7 @@ public class PhoneNumberAdapter extends BaseAdapter{
     }
 
     public void removeItem(int i) {
-        db.delete(mList.get(i).toString());
-        mList.remove(i);
+        db.delete(list.get(i).toString());
+        list.remove(i);
     }
 }
