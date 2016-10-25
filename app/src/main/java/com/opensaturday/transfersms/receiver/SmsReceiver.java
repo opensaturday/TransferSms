@@ -9,9 +9,7 @@ import android.telephony.SmsManager;
 import android.telephony.SmsMessage;
 import android.util.Log;
 
-import com.opensaturday.transfersms.util.SmsTransferDb;
-
-import java.util.Date;
+import com.opensaturday.transfersms.database.SmsTransferDb;
 
 public class SmsReceiver extends BroadcastReceiver{
 

@@ -17,7 +17,7 @@ import android.widget.Toast;
 import com.opensaturday.transfersms.R;
 import com.opensaturday.transfersms.adapter.PhoneNumberAdapter;
 import com.opensaturday.transfersms.receiver.SmsReceiver;
-import com.opensaturday.transfersms.util.SmsTransferDb;
+import com.opensaturday.transfersms.database.SmsTransferDb;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,9 +27,9 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
     private boolean doubleBackToExitPressedOnce = false;
 
 
-    private Button btnOnOff;
-    private Button btnAddPhoneNum;
-    private EditText editPhoneNum;
+    private Button buttonOnOff;
+    private Button buttonAddPhoneNum;
+    private EditText editTextPhoneNum;
     private ListView listViewPhoneNum;
     private PhoneNumberAdapter adapter;
     private static List<BroadcastReceiver> receivers = new ArrayList<BroadcastReceiver>();
@@ -50,13 +50,13 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
     }
 
     private void setLayout() {
-        btnOnOff = (Button)findViewById(R.id.btn_onoff);
-        btnAddPhoneNum = (Button)findViewById(R.id.btn_add);
-        editPhoneNum = (EditText)findViewById(R.id.edit_add_number);
+        buttonOnOff = (Button)findViewById(R.id.btn_onoff);
+        buttonAddPhoneNum = (Button)findViewById(R.id.btn_add);
+        editTextPhoneNum = (EditText)findViewById(R.id.edit_add_number);
         listViewPhoneNum = (ListView)findViewById(R.id.listview_number);
 
-        btnOnOff.setOnClickListener(this);
-        btnAddPhoneNum.setOnClickListener(this);
+        buttonOnOff.setOnClickListener(this);
+        buttonAddPhoneNum.setOnClickListener(this);
     }
 
     private void setFunction() {
@@ -66,6 +66,9 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
         while(c.moveToNext()) {
             phoneArray.add(c.getString(1));
         }
+
+        c.close();
+        db.clearDb();
 
         adapter = new PhoneNumberAdapter(this, android.R.layout.simple_list_item_1, phoneArray);
         listViewPhoneNum.setAdapter(adapter);
@@ -77,23 +80,23 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_add:
-                if(!editPhoneNum.getText().toString().isEmpty()) {
-                    adapter.add(editPhoneNum.getText().toString());
+                if(!editTextPhoneNum.getText().toString().isEmpty()) {
+                    adapter.add(editTextPhoneNum.getText().toString());
                     adapter.notifyDataSetChanged();
-                    editPhoneNum.setText("");
+                    editTextPhoneNum.setText("");
                 }
                 break;
             case R.id.btn_onoff:
                 if(!isStateOn) {
                     isStateOn = true;
-                    btnOnOff.setText(getString(R.string.on));
+                    buttonOnOff.setText(getString(R.string.on));
                     IntentFilter intentFilter = new IntentFilter("android.provider.Telephony.SMS_RECEIVED");
                     intentFilter.addAction(Intent.ACTION_BOOT_COMPLETED);
                     registerReceiver(smsReceiver, intentFilter);
                     receivers.add(smsReceiver);
                 } else {
                     isStateOn = false;
-                    btnOnOff.setText(getString(R.string.off));
+                    buttonOnOff .setText(getString(R.string.off));
                     unregisterReceiver(smsReceiver);
                     receivers.remove(smsReceiver);
                 }

@@ -1,9 +1,11 @@
-package com.opensaturday.transfersms.util;
+package com.opensaturday.transfersms.database;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+
+import com.opensaturday.transfersms.util.SmsTransferDbHelper;
 
 /**
  * Created by Kwontaejin on 2016. 10. 15..
@@ -31,5 +33,10 @@ public class SmsTransferDb {
 
     public Cursor getSelectAll() {
         return db.query("PhoneNumberTable",null,null,null,null,null,null);
+    }
+
+    public void clearDb() {
+        db.close();
+        db = null;
     }
 }

@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.opensaturday.transfersms.util.SmsTransferDb;
+import com.opensaturday.transfersms.database.SmsTransferDb;
 
 import java.util.ArrayList;
 
